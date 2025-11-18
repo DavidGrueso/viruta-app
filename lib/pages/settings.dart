@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
+
+
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  final VoidCallback toggleTheme;
+  const SettingsPage({super.key, required this.toggleTheme});
+  
 
   @override
   Widget build(BuildContext context) {
+
+    TextButton(
+                onPressed: toggleTheme,
+                child: const Text("Modo claro / oscuro"),
+              );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Ajustes"),
-      ),
+      appBar: AppBar(title: const Text("Ajustes")),
       body: const Padding(
         padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Ajustes generales de la app",
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 20),
-            Text("• Aquí configuraremos el mDNS / IP de la máquina"),
-            Text("• Modo oscuro"),
-            Text("• Pruebas de conexión"),
-            Text("• Idioma, etc.")
-          ],
-        ),
+        child: Text("Aquí irán los ajustes de la máquina y la app."),
+
+        
       ),
+      
     );
+    
   }
 }

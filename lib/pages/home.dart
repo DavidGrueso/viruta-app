@@ -1,44 +1,69 @@
 import 'package:flutter/material.dart';
-import 'status.dart';
-import 'settings.dart';
+import 'menu.dart';
+import '../widgets/viruta_card.dart';
+import '../services/mock.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  double temp = 0;
+  String connection = "Desconectado";
+  int timeUsedMin = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  void loadData() async {
+    var data = await MockAPI.getStatus();
+    setState(() {
+      temp = data["temp"];
+      timeUsedMin = data["usageMin"];
+      connection = data["connected"] ? "Conectado" : "Desconectado";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("VIRUTA"),
+        title: const Text("VIRUTA Dashboard"),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MenuPage()),
+            );
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-
-            const SizedBox(height: 20),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const StatusPage()),
-                );
-              },
-              child: const Text("Estado de la máquina"),
+            VirutaCard(
+              title: "Temperatura",
+              value: "$temp °C",
+              icon: Icons.thermostat,
             ),
-
-            const SizedBox(height: 10),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SettingsPage()),
-                );
-              },
-              child: const Text("Ajustes"),
+            VirutaCard(
+              title: "Tiempo de uso",
+              value: "${timeUsedMin} min",
+              icon: Icons.timer,
+            ),
+            VirutaCard(
+              title: "Conexión",
+              value: connection,
+              icon: Icons.wifi,
             ),
           ],
         ),
