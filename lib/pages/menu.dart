@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'settings.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
@@ -7,30 +6,12 @@ class MenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Menú")),
-      body: ListView(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text("Ajustes"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => SettingsPage(toggleTheme: () {})),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text("Cuenta"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.palette),
-            title: const Text("Preferencias"),
-            onTap: () {},
-          ),
-        ],
+      appBar: AppBar(title: const Text('Menu')),
+      body: const Padding(
+        padding: EdgeInsets.all(20),
+        child: Text(
+          'El menu lateral de HomePage es ahora la navegacion principal.',
+        ),
       ),
     );
   }

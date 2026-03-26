@@ -1,10 +1,20 @@
-
 import 'package:flutter/material.dart';
+
 import 'home.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+  final Future<void> Function() toggleTheme;
+  final bool isDarkMode;
+  final String endpoint;
+  final Future<void> Function(String endpoint) onEndpointChanged;
+
+  const AuthPage({
+    super.key,
+    required this.toggleTheme,
+    required this.isDarkMode,
+    required this.endpoint,
+    required this.onEndpointChanged,
+  });
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -16,17 +26,15 @@ class _AuthPageState extends State<AuthPage> {
   bool _isLoading = false;
   String? _errorMessage;
 
-  // Credenciales válidas (puedes reemplazar esto con una llamada a API)
   static const String _validUsername = 'admin';
   static const String _validPassword = '12345';
 
-  void _login() async {
+  Future<void> _login() async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
-    // Simular delay de validación
     await Future.delayed(const Duration(milliseconds: 500));
 
     final username = _usernameController.text.trim();
@@ -41,18 +49,28 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     if (username == _validUsername && password == _validPassword) {
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
-        );
+      if (!mounted) {
+        return;
       }
-    } else {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Usuario o contraseña incorrectos';
-      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HomePage(
+            toggleTheme: widget.toggleTheme,
+            isDarkMode: widget.isDarkMode,
+            initialEndpoint: widget.endpoint,
+            onEndpointChanged: widget.onEndpointChanged,
+          ),
+        ),
+      );
+      return;
     }
+
+    setState(() {
+      _isLoading = false;
+      _errorMessage = 'Usuario o contrasena incorrectos';
+    });
   }
 
   @override
@@ -65,7 +83,7 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 253, 254, 250), 
+      backgroundColor: const Color.fromARGB(255, 253, 254, 250),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(40),
@@ -75,14 +93,14 @@ class _AuthPageState extends State<AuthPage> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Image(
+                  children: const [
+                    Image(
                       image: AssetImage('lib/assets/viruta_logo.png'),
                       height: 80,
                     ),
-                    const SizedBox(width: 20),
-                    const Text(
-                      "VIRUTA",
+                    SizedBox(width: 20),
+                    Text(
+                      'VIRUTA',
                       style: TextStyle(
                         fontSize: 55,
                         letterSpacing: 4,
@@ -93,13 +111,11 @@ class _AuthPageState extends State<AuthPage> {
                   ],
                 ),
                 const SizedBox(height: 40),
-
-                // Campo de usuario
                 Container(
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(193, 0, 0, 0).withOpacity(0.2),
+                        color: Colors.black.withOpacity(0.2),
                         spreadRadius: 1,
                         blurRadius: 15,
                         offset: const Offset(0, 8),
@@ -107,29 +123,30 @@ class _AuthPageState extends State<AuthPage> {
                     ],
                   ),
                   child: TextField(
-                  controller: _usernameController,
-                  decoration: InputDecoration(
-                    hintText: 'Usuario',
-                    hintStyle: TextStyle( fontSize: 14),
-                    prefixIcon: const Icon(Icons.person),
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 255, 255),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                      borderSide: BorderSide.none,
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                      hintText: 'Usuario',
+                      hintStyle: const TextStyle(fontSize: 14),
+                      prefixIcon: const Icon(Icons.person),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 36,
+                      ),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 36),
-                  ),
                   ),
                 ),
                 const SizedBox(height: 23),
-
-                // Campo de contraseña
                 Container(
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(193, 0, 0, 0).withOpacity(0.2),
+                        color: Colors.black.withOpacity(0.2),
                         spreadRadius: 1,
                         blurRadius: 15,
                         offset: const Offset(0, 8),
@@ -141,41 +158,37 @@ class _AuthPageState extends State<AuthPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       filled: true,
-                      hintText: 'Contraseña',
-                      hintStyle: TextStyle( fontSize: 14),
-                      fillColor: const Color.fromARGB(255, 255, 255, 255),
+                      hintText: 'Contrasena',
+                      hintStyle: const TextStyle(fontSize: 14),
+                      fillColor: Colors.white,
                       prefixIcon: const Icon(Icons.lock),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // Mensaje de error
                 if (_errorMessage != null)
                   Container(
                     padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(0, 0, 0, 0),
-                    ),
                     child: Row(
                       children: [
-                        Icon( Icons.error, color: Colors.red.shade800,),
+                        Icon(Icons.error, color: Colors.red.shade800),
                         const SizedBox(width: 8),
                         Text(
-                        _errorMessage!,
-                        style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                          _errorMessage!,
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ],
                     ),
                   ),
                 const SizedBox(height: 20),
-
-                // Botón de iniciar sesión
                 SizedBox(
                   width: 222,
                   child: ElevatedButton(
@@ -183,7 +196,7 @@ class _AuthPageState extends State<AuthPage> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       backgroundColor: const Color.fromARGB(255, 92, 163, 94),
-                      shadowColor: Colors.greenAccent
+                      shadowColor: Colors.greenAccent,
                     ),
                     child: _isLoading
                         ? const SizedBox(
@@ -191,56 +204,60 @@ class _AuthPageState extends State<AuthPage> {
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
                         : const Text(
-                            'Iniciar sesión',
+                            'Iniciar sesion',
                             style: TextStyle(color: Colors.white),
                           ),
                   ),
                 ),
-
-
                 const SizedBox(height: 20),
-                const Text( 
-                  'o inicia sesión con',
+                const Text(
+                  'o inicia sesion con',
                   style: TextStyle(
                     fontSize: 14,
                     color: Color.fromARGB(255, 103, 103, 103),
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Botones de inicio rápido
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [ 
-                    IconButton( 
-                      onPressed: () {}, 
-                      icon: const Icon(Icons.account_circle),
-                      style: IconButton.styleFrom( backgroundColor: const Color.fromARGB(255, 212, 247, 225), foregroundColor: const Color.fromARGB(255, 19, 45, 26)),
-                      ),
-                    const SizedBox(width: 10),
-                    IconButton( 
-                      onPressed: () {}, 
-                      icon: const Icon(Icons.apple),
-                      style: IconButton.styleFrom( backgroundColor: const Color.fromARGB(255, 212, 247, 225), foregroundColor: const Color.fromARGB(255, 19, 45, 26)),
-                      ),
-
-                  ],
-                ),
-                const SizedBox(height: 20),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('¿No tienes una cuenta? Puedes crearla aquí:'),
-                    //const SizedBox(width: 2),
-                    TextButton(onPressed: () {}, child: const Text('Crear cuenta')),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.account_circle),
+                      style: IconButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 212, 247, 225),
+                        foregroundColor: const Color.fromARGB(255, 19, 45, 26),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.apple),
+                      style: IconButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 212, 247, 225),
+                        foregroundColor: const Color.fromARGB(255, 19, 45, 26),
+                      ),
+                    ),
                   ],
-                )
-
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('No tienes una cuenta? Puedes crearla aqui:'),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text('Crear cuenta'),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
