@@ -5,12 +5,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../machine_state.dart';
 
-enum SocketStatus {
-  disconnected,
-  connecting,
-  connected,
-  error,
-}
+enum SocketStatus { disconnected, connecting, connected, error }
 
 class SocketSnapshot {
   final SocketStatus status;
@@ -103,10 +98,7 @@ class Esp32Service {
   }
 
   void sendCommand(String action, {Object? value}) {
-    final payload = <String, dynamic>{
-      'type': 'command',
-      'action': action,
-    };
+    final payload = <String, dynamic>{'type': 'command', 'action': action};
     if (value != null) {
       payload['value'] = value;
     }
@@ -165,10 +157,7 @@ class Esp32Service {
 
     if (_endpoint.isNotEmpty) {
       _connectionController.add(
-        SocketSnapshot(
-          status: SocketStatus.disconnected,
-          endpoint: _endpoint,
-        ),
+        SocketSnapshot(status: SocketStatus.disconnected, endpoint: _endpoint),
       );
     }
   }

@@ -9,15 +9,9 @@ class HomeDashboard extends StatelessWidget {
   final String endpoint;
   final String socketStatus;
   final String statusMessage;
-  final bool isConnected;
-  final bool isConnecting;
   final List<FlSpot> temperatureHistory;
   final VoidCallback onReconnect;
   final VoidCallback onRequestStatus;
-  final VoidCallback onPowerOn;
-  final VoidCallback onPowerOff;
-  final VoidCallback onIncreaseTargetTemp;
-  final VoidCallback onDecreaseTargetTemp;
 
   const HomeDashboard({
     super.key,
@@ -25,15 +19,9 @@ class HomeDashboard extends StatelessWidget {
     required this.endpoint,
     required this.socketStatus,
     required this.statusMessage,
-    required this.isConnected,
-    required this.isConnecting,
     required this.temperatureHistory,
     required this.onReconnect,
     required this.onRequestStatus,
-    required this.onPowerOn,
-    required this.onPowerOff,
-    required this.onIncreaseTargetTemp,
-    required this.onDecreaseTargetTemp,
   });
 
   @override
@@ -170,68 +158,21 @@ class HomeDashboard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 20),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color(0xfff5f7fb),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Control de maquina',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Calentador: ${machineState.heaterOn ? 'Encendido' : 'Apagado'}',
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Temperatura objetivo: '
-                '${machineState.targetTemp.toStringAsFixed(1)} C',
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: isConnecting ? null : onPowerOn,
-                    icon: const Icon(Icons.power_settings_new),
-                    label: const Text('Encender'),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: isConnecting ? null : onPowerOff,
-                    icon: const Icon(Icons.power_off),
-                    label: const Text('Apagar'),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: isConnecting ? null : onDecreaseTargetTemp,
-                    icon: const Icon(Icons.remove),
-                    label: const Text('Temp -5'),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: isConnecting ? null : onIncreaseTargetTemp,
-                    icon: const Icon(Icons.add),
-                    label: const Text('Temp +5'),
-                  ),
-                  OutlinedButton.icon(
-                    onPressed: onRequestStatus,
-                    icon: const Icon(Icons.sync),
-                    label: const Text('Solicitar estado'),
-                  ),
-                  OutlinedButton.icon(
-                    onPressed: onReconnect,
-                    icon: const Icon(Icons.wifi_find),
-                    label: Text(isConnected ? 'Reconectar' : 'Conectar'),
-                  ),
-                ],
-              ),
-            ],
-          ),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: [
+            OutlinedButton.icon(
+              onPressed: onRequestStatus,
+              icon: const Icon(Icons.sync),
+              label: const Text('Actualizar datos'),
+            ),
+            OutlinedButton.icon(
+              onPressed: onReconnect,
+              icon: const Icon(Icons.wifi_find),
+              label: const Text('Reconectar'),
+            ),
+          ],
         ),
       ],
     );

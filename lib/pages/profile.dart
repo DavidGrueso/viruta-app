@@ -6,9 +6,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Perfil'),
-      ),
+      appBar: AppBar(title: const Text('Perfil')),
       body: const Center(
         child: Padding(
           padding: EdgeInsets.all(20),
@@ -18,4 +16,3 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-

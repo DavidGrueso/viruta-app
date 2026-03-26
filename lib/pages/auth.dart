@@ -57,6 +57,7 @@ class _AuthPageState extends State<AuthPage> {
         context,
         MaterialPageRoute(
           builder: (_) => HomePage(
+            username: username,
             toggleTheme: widget.toggleTheme,
             isDarkMode: widget.isDarkMode,
             initialEndpoint: widget.endpoint,
@@ -115,7 +116,7 @@ class _AuthPageState extends State<AuthPage> {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         spreadRadius: 1,
                         blurRadius: 15,
                         offset: const Offset(0, 8),
@@ -146,7 +147,7 @@ class _AuthPageState extends State<AuthPage> {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         spreadRadius: 1,
                         blurRadius: 15,
                         offset: const Offset(0, 8),
@@ -204,8 +205,9 @@ class _AuthPageState extends State<AuthPage> {
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
                             ),
                           )
                         : const Text(
@@ -230,8 +232,12 @@ class _AuthPageState extends State<AuthPage> {
                       onPressed: () {},
                       icon: const Icon(Icons.account_circle),
                       style: IconButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 212, 247, 225),
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          212,
+                          247,
+                          225,
+                        ),
                         foregroundColor: const Color.fromARGB(255, 19, 45, 26),
                       ),
                     ),
@@ -240,16 +246,21 @@ class _AuthPageState extends State<AuthPage> {
                       onPressed: () {},
                       icon: const Icon(Icons.apple),
                       style: IconButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 212, 247, 225),
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          212,
+                          247,
+                          225,
+                        ),
                         foregroundColor: const Color.fromARGB(255, 19, 45, 26),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     const Text('No tienes una cuenta? Puedes crearla aqui:'),
                     TextButton(

@@ -16,7 +16,7 @@ class VirutaApp extends StatefulWidget {
 
 class _VirutaAppState extends State<VirutaApp> {
   bool isDarkMode = false;
-  String endpoint = 'ws://192.168.1.50:81';
+  String endpoint = 'ws://192.168.1.147/ws';
 
   @override
   void initState() {

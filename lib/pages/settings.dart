@@ -51,9 +51,9 @@ class _SettingsPageState extends State<SettingsPage> {
       _saving = false;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Endpoint guardado')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Endpoint guardado')));
   }
 
   @override
